@@ -1,0 +1,53 @@
+{
+  "name": "node-express-starter",
+  "version": "2.0.0",
+  "description": "starter template for expressjs",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "prepare": "husky install",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "start:local": "cross-env NODE_ENV=local-dev PORT=8000 node --watch index.js | pino-pretty -t",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "type:check": "tsc",
+    "lint:check": "eslint src",
+    "lint:fix": "eslint src --fix ",
+    "lint": "npm run format:check && npm run lint:check && npm run type:check",
+    "format:fix": "prettier --write --no-config 'src/**/*.js'",
+    "format:check": "prettier --check --no-config 'src/**/*.js'",
+    "pre-commit": "lint-staged",
+    "pre-push": "npm run lint && npm test"
+  },
+  "lint-staged": {
+    "*.js": [
+      "npm run format:fix",
+      "git add ."
+    ]
+  },
+  "keywords": [
+    "node",
+    "expressjs",
+    "logger",
+    "dev-scripts"
+  ],
+  "author": "sandeepkumaar.c",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.3.11",
+    "h3": "^1.12.0",
+    "mongo-parse": "^2.1.0",
+    "mongodb": "^6.7.0",
+    "pino": "^9.1.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.5",
+    "pino-pretty": "^11.2.2"
+  }
+}
