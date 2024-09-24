@@ -1,35 +1,30 @@
 import fs from "node:fs/promises";
 const packageJson = JSON.parse(await fs.readFile("package.json", "utf-8"));
 import createLogger from "../logger/index.js";
-import { v4 as uuid } from "uuid";
-import { proxyWithContext } from "./async-context.js";
+//import { v4 as uuid } from "uuid";
+//import { proxyWithContext } from "./async-context.js";
 
 export const logger = createLogger(packageJson.name);
-/**
- * @type {import('express').RequestHandler}
- */
-export function httpLogMiddleware(req, res, next) {
-  let txnId = uuid();
+
+export function httpLogMiddleware(event) {
+  const { req, res } = event.node;
+  const {requestId} = event.context
   let httpLog = logger.child({
-    txnId,
+    requestId,
     // other fields that need to be printed on all logs
   });
-  req.txnId = txnId;
-  res.txnId = txnId;
-  res.set({ "X-Request-ID": txnId });
-  req.log = httpLog;
+  event.context.log = httpLog;
 
   const startTime = Date.now();
-  httpLog.info({ req: req });
+  httpLog.info({req});
   res.on("finish", function () {
     res.responseTime = Date.now() - startTime;
-    httpLog.info({ res: res });
+    httpLog.info({res});
   });
-  return next();
 }
-
-/**
- * To use log within the request's context
- */
-const log = proxyWithContext(logger, "log");
-export default log;
+//
+///**
+// * To use log within the request's context
+// */
+//const log = proxyWithContext(logger, "log");
+//export default log;

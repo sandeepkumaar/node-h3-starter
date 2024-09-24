@@ -18,7 +18,8 @@ route="/version"
 curl -i $url$route \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -H "Authorization: $APP_AUTH"
+  -H "Authorization: $APP_AUTH" \
+  -H "X-Request-ID: xyz"
 # -d @$data
   
 

@@ -1,25 +1,17 @@
 import pino from 'pino'
 import { customSerializers } from './serializers.js';
 
-const isLocal = process.env.NODE_ENV && process.env.NODE_ENV.includes('local');
-const isTest = process.env.NODE_ENV && process.env.NODE_ENV.includes('test');
-
-const defaultLevel = isTest 
-  ? "silent"
-  : isLocal
-  ? "debug"
-  : "info"
 
 
 let defaultOpts = {
-  level: defaultLevel,
+  level: process.env.LOG_LEVEL || "info",
   serializers: {
     ...pino.stdSerializers,
     ...customSerializers,
   },
-  formatters: {
-    level: (label='') => ({level: label})
-  },
+  //formatters: {
+  //  level: (label='') => ({level: label})
+  //},
   transport: {
     target: 'pino/file'
   }
